@@ -61,15 +61,11 @@
 					"name": "invalid.illegal.character.cj"
 				},
 				{
-					"match": "b\"\\\\u\\{[0-9a-fA-F]{3,8}\\}\"",
+					"match": "b\"(?:\\\\.|[^\"\\\\\\n])+\"",
 					"name": "invalid.illegal.character.cj"
 				},
 				{
 					"match": "b'[^\\x00-\\xFF'\\\\]'",
-					"name": "invalid.illegal.character.cj"
-				},
-				{
-					"match": "b\"[^\\x00-\\xFF\"\\\\]\"",
 					"name": "invalid.illegal.character.cj"
 				},
 				{
@@ -82,10 +78,6 @@
 				},
 				{
 					"match": "b'(?:\\\\u\\{[0-9a-fA-F]{1,2}\\}|\\\\.|[^'\\\\])'",
-					"name": "constant.character.byte.cj"
-				},
-				{
-					"match": "b\"(?:\\\\u\\{[0-9a-fA-F]{1,2}\\}|\\\\.|[^\"\\\\])\"",
 					"name": "constant.character.byte.cj"
 				},
 				{

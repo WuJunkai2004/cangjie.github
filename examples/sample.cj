@@ -66,6 +66,9 @@ func misc(): Unit {
     let f: Float16 = 3.0
     let s: String = "text"
     let r: Rune = r'汉'
+    let b: UInt8 = b'A'          // 字符字节字面量: UInt8 = 65
+    let be: UInt8 = b'\n'        // 转义: UInt8 = 10
+    let bu: UInt8 = b'\u{41}'    // \u 转义(最多两位): UInt8 = 65
     let ok: Bool = true
     let arr: Array<Int64> = Array<Int64>()
     let varr: VArray<Int64, 4> = VArray<Int64, 4>()
@@ -142,4 +145,14 @@ annotation Mark
 main() {
     let f = Foo<Int64>()
     f.bump()
+}
+
+// ---- invalid character literals (for scope checking) ----
+func invalids(): Unit {
+    var e1: UInt8 = b'AB'        // 多字符
+    var e2: UInt8 = b''          // 空
+    var e3: UInt8 = b'\u{100}'   // \u 超过两位
+    var e4: UInt8 = b'汉'        // 非 ASCII
+    var e5: UInt8 = b"double"    // 双引号形式不存在
+    var e6: Rune = r'ab'
 }
