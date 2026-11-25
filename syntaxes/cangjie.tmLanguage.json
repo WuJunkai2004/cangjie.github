@@ -65,7 +65,7 @@
 					"name": "invalid.illegal.character.cj"
 				},
 				{
-					"match": "b'[^\\x00-\\xFF'\\\\]'",
+					"match": "b'[^\\x00-\\x7f'\\\\]'",
 					"name": "invalid.illegal.character.cj"
 				},
 				{
