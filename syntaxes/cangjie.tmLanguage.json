@@ -4,7 +4,7 @@
 	"scopeName": "source.cj",
 	"patterns": [
 		{ "include": "#comments" },
-		{ "include": "#rune-literals" },
+		{ "include": "#character-literals" },
 		{ "include": "#strings" },
 		{ "include": "#numbers" },
 		{ "include": "#annotations" },
@@ -50,19 +50,43 @@
 			"match": "(?i)@(brief|param|return|note|warning|deprecated|author|version|date|since|file|copyright|details|link|see|throws|exception|example|private|protected|public|internal)",
 			"name": "keyword.other.documentation.cj"
 		},
-		"rune-literals": {
+		"character-literals": {
 			"patterns": [
 				{
 					"match": "[rb](''|\"\")",
-					"name": "invalid.illegal.rune.cj"
+					"name": "invalid.illegal.character.cj"
+				},
+				{
+					"match": "b'\\\\u\\{[0-9a-fA-F]{3,8}\\}'",
+					"name": "invalid.illegal.character.cj"
+				},
+				{
+					"match": "b\"\\\\u\\{[0-9a-fA-F]{3,8}\\}\"",
+					"name": "invalid.illegal.character.cj"
+				},
+				{
+					"match": "b'[^\\x00-\\xFF'\\\\]'",
+					"name": "invalid.illegal.character.cj"
+				},
+				{
+					"match": "b\"[^\\x00-\\xFF\"\\\\]\"",
+					"name": "invalid.illegal.character.cj"
 				},
 				{
 					"match": "[rb]'(?:\\\\u\\{[0-9a-fA-F]{1,8}\\}|\\\\.|[^'\\\\]){2,}'",
-					"name": "invalid.illegal.rune.cj"
+					"name": "invalid.illegal.character.cj"
 				},
 				{
 					"match": "[rb]\"(?:\\\\u\\{[0-9a-fA-F]{1,8}\\}|\\\\.|[^\"\\\\]){2,}\"",
-					"name": "invalid.illegal.rune.cj"
+					"name": "invalid.illegal.character.cj"
+				},
+				{
+					"match": "b'(?:\\\\u\\{[0-9a-fA-F]{1,2}\\}|\\\\.|[^'\\\\])'",
+					"name": "constant.character.byte.cj"
+				},
+				{
+					"match": "b\"(?:\\\\u\\{[0-9a-fA-F]{1,2}\\}|\\\\.|[^\"\\\\])\"",
+					"name": "constant.character.byte.cj"
 				},
 				{
 					"match": "r'(?:\\\\u\\{[0-9a-fA-F]{1,8}\\}|\\\\.|[^'\\\\])'",
