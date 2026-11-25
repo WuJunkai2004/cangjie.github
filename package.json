@@ -1,0 +1,41 @@
+{
+	"name": "cangjie-grammar",
+	"displayName": "Cangjie Grammar",
+	"description": "TextMate grammar for the Cangjie programming language (scope: source.cj). Ported from the cangjie.vim syntax script.",
+	"version": "0.1.0",
+	"publisher": "WuJunkai2004",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/WuJunkai2004/cangjie.github"
+	},
+	"engines": {
+		"vscode": "^1.75.0"
+	},
+	"categories": [
+		"Programming Languages"
+	],
+	"contributes": {
+		"languages": [
+			{
+				"id": "cangjie",
+				"aliases": [
+					"Cangjie",
+					"cangjie",
+					"仓颉"
+				],
+				"extensions": [
+					".cj"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "cangjie",
+				"scopeName": "source.cj",
+				"path": "./syntaxes/cangjie.tmLanguage.json"
+			}
+		]
+	}
+}
