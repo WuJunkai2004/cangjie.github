@@ -1,0 +1,337 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Cangjie",
+	"scopeName": "source.cj",
+	"patterns": [
+		{ "include": "#comments" },
+		{ "include": "#rune-literals" },
+		{ "include": "#strings" },
+		{ "include": "#numbers" },
+		{ "include": "#annotations" },
+		{ "include": "#declarations" },
+		{ "include": "#keywords" },
+		{ "include": "#constants" },
+		{ "include": "#builtin-types" },
+		{ "include": "#builtin-functions" },
+		{ "include": "#builtin-interfaces" },
+		{ "include": "#builtin-classes" },
+		{ "include": "#builtin-errors" },
+		{ "include": "#backtick-identifiers" },
+		{ "include": "#operators" }
+	],
+	"repository": {
+		"comments": {
+			"patterns": [
+				{
+					"begin": "/\\*",
+					"end": "\\*/",
+					"name": "comment.block.cj",
+					"patterns": [
+						{ "include": "#comment-tags" },
+						{ "include": "#doc-keywords" }
+					]
+				},
+				{
+					"begin": "//",
+					"end": "$",
+					"name": "comment.line.double-slash.cj",
+					"patterns": [
+						{ "include": "#comment-tags" },
+						{ "include": "#doc-keywords" }
+					]
+				}
+			]
+		},
+		"comment-tags": {
+			"match": "\\b(TODO|FIXME|XXX|NOTE|BUG)\\b",
+			"name": "keyword.other.todo.cj"
+		},
+		"doc-keywords": {
+			"match": "(?i)@(brief|param|return|note|warning|deprecated|author|version|date|since|file|copyright|details|link|see|throws|exception|example|private|protected|public|internal)",
+			"name": "keyword.other.documentation.cj"
+		},
+		"rune-literals": {
+			"patterns": [
+				{
+					"match": "[rb](''|\"\")",
+					"name": "invalid.illegal.rune.cj"
+				},
+				{
+					"match": "[rb]'(?:\\\\u\\{[0-9a-fA-F]{1,8}\\}|\\\\.|[^'\\\\]){2,}'",
+					"name": "invalid.illegal.rune.cj"
+				},
+				{
+					"match": "[rb]\"(?:\\\\u\\{[0-9a-fA-F]{1,8}\\}|\\\\.|[^\"\\\\]){2,}\"",
+					"name": "invalid.illegal.rune.cj"
+				},
+				{
+					"match": "r'(?:\\\\u\\{[0-9a-fA-F]{1,8}\\}|\\\\.|[^'\\\\])'",
+					"name": "constant.character.rune.cj"
+				},
+				{
+					"match": "r\"(?:\\\\u\\{[0-9a-fA-F]{1,8}\\}|\\\\.|[^\"\\\\])\"",
+					"name": "constant.character.rune.cj"
+				}
+			]
+		},
+		"strings": {
+			"patterns": [
+				{ "include": "#string-raw" },
+				{ "include": "#string-multi-line" },
+				{ "include": "#string-single-line" }
+			]
+		},
+		"string-raw": {
+			"patterns": [
+				{
+					"begin": "(#*)#\"",
+					"beginCaptures": {
+						"0": { "name": "punctuation.definition.string.begin.cj" }
+					},
+					"end": "\"#\\1",
+					"endCaptures": {
+						"0": { "name": "punctuation.definition.string.end.cj" }
+					},
+					"name": "string.quoted.double.raw.cj"
+				},
+				{
+					"begin": "(#*)#'",
+					"beginCaptures": {
+						"0": { "name": "punctuation.definition.string.begin.cj" }
+					},
+					"end": "'#\\1",
+					"endCaptures": {
+						"0": { "name": "punctuation.definition.string.end.cj" }
+					},
+					"name": "string.quoted.single.raw.cj"
+				}
+			]
+		},
+		"string-multi-line": {
+			"patterns": [
+				{
+					"begin": "\"\"\"",
+					"end": "\"\"\"",
+					"name": "string.quoted.double.block.cj",
+					"patterns": [
+						{ "include": "#interpolation" },
+						{ "include": "#escapes" }
+					]
+				},
+				{
+					"begin": "'''",
+					"end": "'''",
+					"name": "string.quoted.single.block.cj",
+					"patterns": [
+						{ "include": "#interpolation" },
+						{ "include": "#escapes" }
+					]
+				}
+			]
+		},
+		"string-single-line": {
+			"patterns": [
+				{
+					"begin": "\"",
+					"end": "\"|(?=\\n)",
+					"name": "string.quoted.double.cj",
+					"patterns": [
+						{ "include": "#interpolation" },
+						{ "include": "#escapes" }
+					]
+				},
+				{
+					"begin": "'",
+					"end": "'|(?=\\n)",
+					"name": "string.quoted.single.cj",
+					"patterns": [
+						{ "include": "#interpolation" },
+						{ "include": "#escapes" }
+					]
+				}
+			]
+		},
+		"interpolation": {
+			"begin": "\\$\\{",
+			"end": "\\}",
+			"name": "meta.interpolation.cj",
+			"beginCaptures": {
+				"0": { "name": "punctuation.section.embedded.begin.cj" }
+			},
+			"endCaptures": {
+				"0": { "name": "punctuation.section.embedded.end.cj" }
+			},
+			"patterns": [
+				{ "include": "#keywords" },
+				{ "include": "#constants" },
+				{ "include": "#declarations" },
+				{ "include": "#builtin-types" },
+				{ "include": "#builtin-functions" },
+				{ "include": "#builtin-interfaces" },
+				{ "include": "#builtin-classes" },
+				{ "include": "#builtin-errors" },
+				{ "include": "#numbers" },
+				{ "include": "#backtick-identifiers" },
+				{ "include": "#operators" }
+			]
+		},
+		"escapes": {
+			"match": "\\\\u\\{[0-9a-fA-F]{1,8}\\}|\\\\.",
+			"name": "constant.character.escape.cj"
+		},
+		"numbers": {
+			"patterns": [
+				{
+					"match": "(?i)\\b0x(?:[0-9a-f_]+\\.?|[0-9a-f_]*\\.[0-9a-f_]+)p[-+]?\\d[0-9_]*\\b",
+					"name": "constant.numeric.float.hexadecimal.cj"
+				},
+				{
+					"match": "(?i)\\b\\d[0-9_]*\\.\\d[0-9_]*(?:[ep][-+]?\\d[0-9_]*)?(?:f(?:16|32|64))?\\b",
+					"name": "constant.numeric.float.decimal.cj"
+				},
+				{
+					"match": "(?i)\\b\\d[0-9_]*\\.(?:[ep][-+]?\\d[0-9_]*)?(?:f(?:16|32|64))?\\b",
+					"name": "constant.numeric.float.decimal.cj"
+				},
+				{
+					"match": "(?i)\\.\\d[0-9_]*(?:[ep][-+]?\\d[0-9_]*)?(?:f(?:16|32|64))?\\b",
+					"name": "constant.numeric.float.decimal.cj"
+				},
+				{
+					"match": "(?i)\\b\\d[0-9_]*e[-+]?\\d[0-9_]*(?:f(?:16|32|64))?\\b",
+					"name": "constant.numeric.float.decimal.cj"
+				},
+				{
+					"match": "(?i)\\b0x[0-9a-f_]+(?:[iu](?:8|16|32|64))?\\b",
+					"name": "constant.numeric.hexadecimal.cj"
+				},
+				{
+					"match": "(?i)\\b0o[0-7_]+(?:[iu](?:8|16|32|64))?\\b",
+					"name": "constant.numeric.octal.cj"
+				},
+				{
+					"match": "(?i)\\b0b[01_]+(?:[iu](?:8|16|32|64))?\\b",
+					"name": "constant.numeric.binary.cj"
+				},
+				{
+					"match": "(?i)\\b\\d[0-9_]*(?:[iu](?:8|16|32|64))?\\b",
+					"name": "constant.numeric.decimal.cj"
+				}
+			]
+		},
+		"annotations": {
+			"match": "(@)([A-Za-z_]\\w*)",
+			"name": "meta.annotation.cj",
+			"captures": {
+				"1": { "name": "punctuation.definition.annotation.cj" },
+				"2": { "name": "entity.other.attribute-name.cj" }
+			}
+		},
+		"declarations": {
+			"patterns": [
+				{
+					"match": "\\b(func)\\s+([A-Za-z_]\\w*)",
+					"captures": {
+						"1": { "name": "keyword.declaration.cj" },
+						"2": { "name": "entity.name.function.cj" }
+					}
+				},
+				{
+					"match": "\\b(class|interface|struct|enum|extend|type)\\s+([A-Za-z_]\\w*)",
+					"captures": {
+						"1": { "name": "keyword.declaration.cj" },
+						"2": { "name": "entity.name.type.cj" }
+					}
+				}
+			]
+		},
+		"keywords": {
+			"patterns": [
+				{
+					"match": "\\b(abstract|class|const|enum|extend|foreign|func|import|interface|let|macro|mut|open|operator|override|package|private|prop|protected|public|redef|static|struct|type|var)\\b",
+					"name": "keyword.declaration.cj"
+				},
+				{
+					"match": "\\b(as|break|case|catch|continue|do|else|finally|for|if|in|is|match|quote|return|spawn|super|synchronized|throw|try|unsafe|where|while)\\b",
+					"name": "keyword.control.cj"
+				},
+				{
+					"match": "\\b(init|main)\\b",
+					"name": "keyword.other.cj"
+				}
+			]
+		},
+		"constants": {
+			"patterns": [
+				{
+					"match": "\\b(true|false)\\b",
+					"name": "constant.language.boolean.cj"
+				},
+				{
+					"match": "\\b(this)\\b",
+					"name": "variable.language.cj"
+				},
+				{
+					"match": "\\b(Some|None)\\b",
+					"name": "constant.language.enum.cj"
+				},
+				{
+					"match": "\\b(Option)\\b",
+					"name": "support.type.cj"
+				}
+			]
+		},
+		"builtin-types": {
+			"match": "\\b(CPointerHandle|CPointerResource|CPointer|CStringResource|CString|DefaultHasher|Float16|Float32|Float64|IntNative|UIntNative|Int64|UInt64|Int32|UInt32|Int16|UInt16|Int8|UInt8|Duration|Nothing|VArray|Rune|String|Range|Array|Bool|Byte|LibC|This|Unit|Int|UInt)\\b",
+			"name": "support.type.cj"
+		},
+		"builtin-functions": {
+			"match": "\\b(acquireArrayRawData|releaseArrayRawData|alignOf|exclusiveScope|eprintln|eprint|ifNone|ifSome|readln|refEq|sizeOf|sleep|zeroValue|println|print|max|min)\\b",
+			"name": "support.function.cj"
+		},
+		"builtin-interfaces": {
+			"match": "\\b(ThreadContext|LessOrEqual|GreaterOrEqual|Comparable|Equatable|Hashable|Iterable|Collection|Countable|Greater|Resource|ToString|Hasher|NotEqual|CType|Equal|Less|Any)\\b",
+			"name": "support.type.cj"
+		},
+		"builtin-classes": {
+			"match": "\\b(ArrayIterator|RangeIterator|StackTraceElement|StringBuilder|ThreadLocal|ThreadSnapshot|Iterator|Object|Thread|Future|Box)\\b",
+			"name": "support.type.cj"
+		},
+		"builtin-errors": {
+			"match": "\\b(ArithmeticException|IncompatiblePackageException|IndexOutOfBoundsException|NegativeArraySizeException|IllegalArgumentException|IllegalFormatException|IllegalMemoryException|IllegalStateException|ExclusiveScopeException|StackOverflowError|OutOfMemoryError|NoneValueException|OverflowException|SpawnException|TimeoutException|UnsupportedException|Exception|Error)\\b",
+			"name": "support.class.cj"
+		},
+		"backtick-identifiers": {
+			"match": "`[^`\\n]*`",
+			"name": "variable.other.identifier.cj"
+		},
+		"operators": {
+			"patterns": [
+				{
+					"match": "\\.\\.\\.",
+					"name": "keyword.operator.cj"
+				},
+				{
+					"match": ":=|\\|\\||<-|\\+\\+|--",
+					"name": "keyword.operator.cj"
+				},
+				{
+					"match": "(?:<<|>>|&\\^)=?",
+					"name": "keyword.operator.cj"
+				},
+				{
+					"match": "/(?:=|(?![/*]))",
+					"name": "keyword.operator.cj"
+				},
+				{
+					"match": "[-+%<>!&|^*=]=?",
+					"name": "keyword.operator.cj"
+				},
+				{
+					"match": "[~:]|\\.\\.",
+					"name": "keyword.operator.cj"
+				}
+			]
+		}
+	}
+}
